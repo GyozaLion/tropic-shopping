@@ -3,6 +3,8 @@
 [ox_lib](https://github.com/overextended/ox_lib)
 
 [ox_target](https://github.com/overextended/ox_target)
+or
+[qb-target](https://github.com/qbcore-framework/qb-target)
 
 [ox_inventory](https://github.com/overextended/ox_inventory)
 
@@ -13,7 +15,7 @@ any kind of emote menu
 # Instructions
 
 add these to your emote menu
-
+```
 ["market"] = {"missfbi4prepp1", "idle", "Shop with basket", AnimationOptions =
    {
       Prop = "bzzz_prop_shop_basket_a",
@@ -32,7 +34,7 @@ add these to your emote menu
       EmoteLoop = true,
       EmoteMoving = true,
    }},
-
+```
 # Links
 [preview](https://youtu.be/u3QC1gm0j6M)
 
