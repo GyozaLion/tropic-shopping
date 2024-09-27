@@ -3,29 +3,25 @@ local basketItems = {}
 
 Citizen.CreateThread(function()
     for storeName, storeData in pairs(Config.Stores) do
-        exports.ox_target:addSphereZone({
-            coords = storeData.basketLocation,
-            radius = 0.9,
-            options = {
-                {
-                    label = "Grab Basket",
-                    icon = "fas fa-shopping-basket",
-                    onSelect = function()
-                        grabBasket(storeName)
-                    end,
-                },
-                {
-                    label = "Put Away Basket",
-                    icon = "fas fa-trash-alt",
-                    onSelect = function()
-                        putAwayBasket(storeName)
-                    end,
-                    canInteract = function()
-                        return basket
-                    end
-                }
+        addTarget(storeData.basketLocation, {
+            {
+                label = "Grab Basket",
+                icon = "fas fa-shopping-basket",
+                onSelect = function()
+                    grabBasket(storeName)
+                end,
             },
-        })
+            {
+                label = "Put Away Basket",
+                icon = "fas fa-trash-alt",
+                onSelect = function()
+                    putAwayBasket(storeName)
+                end,
+                canInteract = function()
+                    return basket
+                end
+            }
+        }, 0.9)
     end
 end)
 
@@ -108,19 +104,15 @@ end
 Citizen.CreateThread(function()
     for storeName, storeData in pairs(Config.Stores) do
         for _, zone in pairs(storeData.zones) do
-            exports.ox_target:addSphereZone({
-                coords = zone.location,
-                radius = 0.8,
-                options = {
-                    {
-                        label = "Browse " .. zone.label,
-                        icon = "fas fa-box",
-                        onSelect = function()
-                            openItemMenu(zone.items)
-                        end,
-                    }
-                },
-            })
+            addTarget(zone.location, {
+                {
+                    label = "Browse " .. zone.label,
+                    icon = "fas fa-box",
+                    onSelect = function()
+                        openItemMenu(zone.items)
+                    end,
+                }
+            }, 0.8)
         end
     end
 end)
@@ -187,19 +179,15 @@ end
 
 Citizen.CreateThread(function()
     for storeName, storeData in pairs(Config.Stores) do
-        exports.ox_target:addSphereZone({
-            coords = storeData.checkoutLocation,
-            radius = 0.7,
-            options = {
-                {
-                    label = "Checkout",
-                    icon = "fas fa-cash-register",
-                    onSelect = function()
-                        checkout(storeName)
-                    end,
-                }
-            },
-        })
+        addTarget(storeData.checkoutLocation, {
+            {
+                label = "Checkout",
+                icon = "fas fa-cash-register",
+                onSelect = function()
+                    checkout(storeName)
+                end,
+            }
+        }, 0.7)
     end
 end)
 
@@ -236,5 +224,24 @@ function checkout(storeName)
         end
     else
         lib.notify({ title = "Basket", description = "You don't have a basket!", type = 'error' })
+    end
+end
+
+-- Helper function to handle both ox_target and qb-target
+function addTarget(coords, options, radius)
+    if Config.Target == "ox" then
+        exports.ox_target:addSphereZone({
+            coords = coords,
+            radius = radius,
+            options = options,
+        })
+    elseif Config.Target == "qb" then
+        exports['qb-target']:AddCircleZone("targetZone", coords, radius, {
+            name = "targetZone",
+            debugPoly = false
+        }, {
+            options = options,
+            distance = radius
+        })
     end
 end
