@@ -1,6 +1,6 @@
 Config = {}
 
-
+Config.Target = "qb" -- accepted value ox or qb
 Config.Stores = {
     ["ballas247"] = {
         basketLocation = vector3(-54.21, -1754.48, 29.42),
